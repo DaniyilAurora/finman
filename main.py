@@ -10,13 +10,22 @@ app = Flask(__name__)
 def main():
     # If there is new request to add
     if request.method == 'POST':
-        # Getting data from the post request
-        amount = float(request.form['amount'])
-        description = request.form['description']
-        category = request.form['category']
+        form_name = request.form.get("form_name")
+        
+        if form_name == "add":
+            # Getting data from the post request
+            amount = float(request.form['amount'])
+            description = request.form['description']
+            category = request.form['category']
 
-        # Processing the data
-        database.add_record(amount, description, category, datetime.now())
+            # Processing the data
+            database.add_record(amount, description, category, datetime.now())
+        elif form_name == "delete":
+            # Getting data from the post request
+            id = int(request.form['id'])
+
+            # Processing the data
+            database.delete_record(id)
         
         return redirect(url_for("main"))
     else:

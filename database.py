@@ -23,7 +23,7 @@ class Database():
         connection = self.__get_connection()
         cursor = connection.cursor()
 
-        cursor.execute("SELECT amount, description, category, date FROM finances;")
+        cursor.execute("SELECT id, amount, description, category, date FROM finances;")
         result = cursor.fetchall()
         connection.close()
         return result

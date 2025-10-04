@@ -9,6 +9,7 @@
 <body>
     <table>
         <tr>
+            <th>ID</th>
             <th>Amount</th>
             <th>Description</th>
             <th>Category</th>
@@ -20,12 +21,14 @@
             <td>{{ row[1] }}</td>
             <td>{{ row[2] }}</td>
             <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
         </tr>
         {% endfor %}
     </table>
     <br>
     <h2>Add new data</h2>
     <form method="POST">
+        <input type="hidden" name="form_name" value="add">
         <input name="amount" type="number" step="0.01" placeholder="Amount">
         <br>
         <input name="description" type="text" placeholder="Description">
@@ -36,6 +39,15 @@
             <option value="{{ category }}">
             {% endfor %}
         </datalist>
+        <br>
+        <br>
+        <input type="submit">
+    </form>
+    <br>
+    <h2>Remove data</h2>
+    <form method="POST">
+        <input type="hidden" name="form_name" value="delete">
+        <input name="id" type="number" placeholder="Id">
         <br>
         <br>
         <input type="submit">
