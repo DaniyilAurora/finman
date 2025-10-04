@@ -24,11 +24,28 @@ class Database():
         cursor = connection.cursor()
 
         cursor.execute("SELECT amount, description, category, date FROM finances;")
-        results = cursor.fetchall()
+        result = cursor.fetchall()
         connection.close()
-        return results
+        return result
 
-    def __add_record(self, amount: float, description: str, category: str, date: datetime) -> None:
+    def get_categories(self) -> list[str]:
+        connection = self.__get_connection()
+        cursor = connection.cursor()
+
+        cursor.execute("SELECT DISTINCT category FROM finances;")
+        result = cursor.fetchall()
+        
+        # Sanitizing the output (Remove tuples, whitespaces etc.)
+        categories = [
+            category.strip()
+            for (category,) in result
+            if category is not None
+        ]
+
+        connection.close()
+        return categories
+
+    def add_record(self, amount: float, description: str, category: str, date: datetime) -> None:
         connection = self.__get_connection()
         cursor = connection.cursor()
 
@@ -36,7 +53,7 @@ class Database():
         connection.commit()
         connection.close()
 
-    def __delete_record(self, id: int) -> None:
+    def delete_record(self, id: int) -> None:
         connection = self.__get_connection()
         cursor = connection.cursor()
 
@@ -50,6 +67,7 @@ class Database():
 
         cursor.execute("CREATE TABLE finances(id integer primary key, amount real, description varchar(255), category varchar(255), date datetime);")
         connection.close()
+
     def __delete_table(self) -> None:
         connection = self.__get_connection()
         cursor = connection.cursor()

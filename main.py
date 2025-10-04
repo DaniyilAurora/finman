@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from database import Database
 from datetime import datetime
 
@@ -6,10 +6,23 @@ database = Database()
 
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-    records = database.get_records()
-    return render_template("index.html", rows=records)
+@app.route("/", methods=['GET', 'POST'])
+def main():
+    # If there is new request to add
+    if request.method == 'POST':
+        # Getting data from the post request
+        amount = float(request.form['amount'])
+        description = request.form['description']
+        category = request.form['category']
+
+        # Processing the data
+        database.add_record(amount, description, category, datetime.now())
+        
+        return redirect(url_for("main"))
+    else:
+        records = database.get_records()
+        categories = database.get_categories()
+        return render_template("index.html", rows=records, categories=categories)
 
 if __name__ == "__main__":
     app.run(debug=True)
